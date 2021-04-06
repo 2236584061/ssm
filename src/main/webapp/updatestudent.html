@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改学生信息</title>
+    <script src="js/jquery.js"></script>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background: #f8eac3
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    #page {
+        width: 300px;
+        margin: 50px auto 0 auto;
+        background: white;
+        padding: 20px;
+    }
+    #update-btn{
+        width: 200px;
+        height: 40px;
+        display: block;
+        margin: auto;
+    }
+    #page > div{
+        margin: 20px 0;
+        display: flex;
+        justify-content: space-around;
+    }
+</style>
+<body>
+<div id="page">
+
+    <h1>修改学生信息</h1>
+    <div>
+        <label>姓名:</label>
+        <input id="name">
+    </div>
+    <div>
+        <label>年龄:</label>
+        <input id="age">
+    </div>
+    <div>
+        <label>性别:</label>
+        <input id="sex">
+    </div>
+    <div>
+        <label>学号:</label>
+        <input id="sno">
+    </div>
+    <div>
+        <label>地址:</label>
+        <input id="address">
+    </div>
+
+    <button id="update-btn" onclick="update()">修改</button>
+</div>
+
+</body>
+<script>
+
+    //获取get传值的方法
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURI(r[2]);
+        return null;
+    }
+
+    var id = getQueryString("id");
+
+    if (id==null){
+        alert("id为空")
+        location.href='index.html'
+    }
+
+    $.ajax({
+        type: "POST",
+        url: "getstudent",
+           data: "id="+id,
+        success: function (res) {
+            if (res.code == 200) {
+$("#name").val(res.data.name)
+$("#age").val(res.data.age)
+$("#sex").val(res.data.sex)
+$("#sno").val(res.data.sno)
+$("#address").val(res.data.address)
+            }
+
+        }
+    })
+
+   function update() {
+        var formdata = "id="+id
+            +"&name="+$("#name").val()
+            +"&age="+$("#age").val()
+            +"&sex="+$("#sex").val()
+            +"&sno="+$("#sno").val()
+            +"&address="+$("#address").val()
+
+
+
+       $.ajax({
+            type: "GET",
+            url: "updtestudent",
+            data: formdata,
+            success: function (res) {
+                if (res.code == 200) {
+                  alert("修改成功")
+
+                    location.href="index.html"
+                }
+
+            }
+        })
+    }
+
+
+
+</script>
+</html>

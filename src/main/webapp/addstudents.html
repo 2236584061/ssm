@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加学生信息</title>
+    <script src="js/jquery.js"></script>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background: #f8eac3
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    #page {
+        width: 300px;
+        margin: 50px auto 0 auto;
+        background: white;
+        padding: 20px;
+    }
+    #update-btn{
+        width: 200px;
+        height: 40px;
+        display: block;
+        margin: auto;
+    }
+    #page > div{
+        margin: 20px 0;
+        display: flex;
+        justify-content: space-around;
+    }
+</style>
+<body>
+<div id="page">
+
+    <h1>添加学生</h1>
+    <div>
+        <label>姓名:</label>
+        <input id="name">
+    </div>
+    <div>
+        <label>年龄:</label>
+        <input id="age">
+    </div>
+    <div>
+        <label>性别:</label>
+        <input id="sex">
+    </div>
+    <div>
+        <label>学号:</label>
+        <input id="sno">
+    </div>
+    <div>
+        <label>地址:</label>
+        <input id="address">
+    </div>
+
+    <button id="update-btn" onclick="add()">添加</button>
+</div>
+
+</body>
+<script>
+
+
+   function add() {
+        var formdata ="&name="+$("#name").val()
+            +"&age="+$("#age").val()
+            +"&sex="+$("#sex").val()
+            +"&sno="+$("#sno").val()
+            +"&address="+$("#address").val()
+
+
+
+       $.ajax({
+            type: "GET",
+            url: "addstudent",
+            data: formdata,
+            success: function (res) {
+                if (res.code == 200) {
+                  alert("添加成功")
+
+                    location.href="index.html"
+                }
+
+            }
+        })
+    }
+
+
+
+</script>
+</html>

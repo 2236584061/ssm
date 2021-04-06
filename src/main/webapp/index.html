@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>学生信息</title>
+    <script src="js/jquery.js"></script>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background: #f8eac3
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    td {
+        padding: 12px 24px;
+    }
+
+    #page {
+        width: 1000px;
+        margin: 50px auto 0 auto;
+        /* background: saddlebrown; */
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #addStudentBtn {
+        width: 300px;
+        height: 40px;
+        text-align: center;
+    }
+
+    #addStudentBtn:hover {
+        background: #50ec08
+    }
+</style>
+
+<body>
+
+<div id="page">
+
+
+    <h1>学生信息管理</h1>
+    <button id="addStudentBtn" onclick="location.replace('addstudents.html')">添加学生信息</button>
+
+    <table border="2">
+        <thead>
+        <tr>
+            <td>姓名</td>
+            <td>年龄</td>
+            <td>性别</td>
+            <td>学号</td>
+            <td>地址</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody id="tbody">
+        <!--        <tr>-->
+        <!--            <td>姓名</td>-->
+        <!--            <td>年龄</td>-->
+        <!--            <td>性别</td>-->
+        <!--            <td>学号</td>-->
+        <!--            <td>地址</td>-->
+        <!--            <td>-->
+        <!--                <a href="updatestudents">修改</a>-->
+        <!--                <a href="javascript:del('id')">删除</a>-->
+        <!--            </td>-->
+        <!--        </tr>-->
+
+        </tbody>
+
+    </table>
+
+</div>
+<script>
+
+    /*
+    界面初始化渲染表格
+    */
+    function init() {
+
+        $.ajax({
+            type: "POST",
+            url: "getstudentlist",
+            //    data: "",
+            success: function (res) {
+                if (res.code == 200) {
+
+
+                    let html = "";
+
+                    if (res.data.length > 0) {
+                        for (var i = 0; i < res.data.length; i++) {
+                            html += "        <tr>\n" +
+                                "            <td>" + res.data[i].name + "</td>\n" +
+                                "            <td>" + res.data[i].age + "</td>\n" +
+                                "            <td>" + res.data[i].sex + "</td>\n" +
+                                "            <td>" + res.data[i].sno + "</td>\n" +
+                                "            <td>" + res.data[i].address + "</td>\n" +
+                                "            <td>\n" +
+                                "                <a href=\"updatestudent.html?id=" + res.data[i].id + "\">修改</a>\n" +
+                                "                <a href=\"javascript:del('" + res.data[i].id + "')\">删除</a>\n" +
+                                "            </td>\n" +
+                                "        </tr>"
+                        }
+                    } else {
+                        html = " <tr>\n" +
+                            "            <td colspan='6' style='text-align: center'>暂无</td>\n" +
+                            "        </tr>"
+                    }
+
+                    $("#tbody").html(html)
+                }
+
+            }
+        })
+
+    }
+
+    init()
+
+    const del = id =>{
+        if (confirm("是否删除")) {
+
+            $.ajax({
+                type: "POST",
+                url: "delstudent",
+                   data: "id=" + id,
+                success: function (res) {
+                    if (res.code == 200) {
+
+                        alert("删除成功")
+                        init()
+
+
+                    }
+                }
+            })
+
+        }
+
+    }
+
+</script>
+</body>
+
+</html>
